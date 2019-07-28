@@ -1,0 +1,66 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    role: redis-autossl
+  name: redis-autossl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: redis-autossl
+  template:
+    metadata:
+      labels:
+        role: redis-autossl
+    spec:
+      containers:
+      - args:
+        - --maxmemory
+        - "524288000"
+        - --maxmemory-policy
+        - allkeys-lru
+        - --protected-mode
+        - "no"
+        - --save
+        - "900"
+        - "1"
+        - --save
+        - "300"
+        - "10"
+        - --save
+        - "60"
+        - "10000"
+        command:
+        - redis-server
+        image: redis:4.0.9-alpine
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 6379
+          timeoutSeconds: 1
+        name: redis
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: 0.5Gi
+          requests:
+            cpu: "0.1"
+            memory: 0.1Gi
+        volumeMounts:
+        - mountPath: /data
+          name: redis-data
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-autossl
