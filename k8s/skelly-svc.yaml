@@ -2,13 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: example
-  name: example
+    name: skelly
+  name: skelly
 spec:
   type: LoadBalancer
   selector:
-    role: example
+    role: skelly
   ports:
+  # We want both regular http and https
+  # Let's Encrypt certification dance happens on both
   - name: http
     port: 80
     protocol: TCP
