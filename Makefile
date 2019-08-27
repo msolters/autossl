@@ -8,10 +8,13 @@ image=$(base):$(shorthash)
 
 all: build release
 
+export DOCKER_REPO=$(registry)
+export PROJECT_ID=$(projectID)
+export GIT_HASH=$(shorthash)
 skaffold-run:
-	DOCKER_REPO=$(registry) PROJECT_ID=$(projectID) bash templateSkaffold.sh
-	DOCKER_REPO=$(registry) GIT_HASH=$(shorthash) bash templateKustomization.sh
-	DOCKER_REPO=$(registry) GIT_HASH=$(shorthash) skaffold run
+	bash templateSkaffold.sh
+	bash templateKustomization.sh
+	skaffold run
 
 build:
 	docker build -t $(image) .
