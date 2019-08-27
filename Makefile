@@ -9,7 +9,6 @@ image=$(base):$(shorthash)
 all: build release
 
 export DOCKER_REPO=$(registry)
-export PROJECT_ID=$(projectID)
 export GIT_HASH=$(shorthash)
 skaffold-run:
 	bash templateSkaffold.sh
