@@ -1,4 +1,4 @@
-FROM openresty/openresty:1.13.6.1-2-xenial
+FROM openresty/openresty:1.15.8.3-xenial
 
 RUN luarocks install lua-resty-auto-ssl
 RUN mkdir -p /etc/resty-auto-ssl
